@@ -26,6 +26,21 @@ Getting Started
 
 1. Download and run the app.
 
+Problems with the starter code
+---------------
+As you played the game, you may have observed the following bugs:
+
+On clicking the Submit button, the app does not check the player's word. The player always scores points.
+There is no way to end the game. The app lets you play beyond 10 words.
+The game screen shows a scrambled word, player's score, and word count. Change the screen orientation by rotating the device or emulator. Notice that the current word, score, and word count are lost and the game restarts from the beginning.
+Main issues in the app
+The starter app doesn't save and restore the app state and data during configuration changes, such as when the device orientation changes.
+
+You could resolve this issue using the onSaveInstanceState() callback. However, using the onSaveInstanceState() method requires you to write extra code to save the state in a bundle, and to implement logic to retrieve that state. Also, the amount of data that can be stored is minimal.
+
+You can resolve these issues using the Android Architecture components that you learn about in this pathway.
+
+
 License
 -------
 
