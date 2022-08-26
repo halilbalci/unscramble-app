@@ -18,6 +18,7 @@ class GameViewModel : ViewModel() {
     val score: LiveData<Int> get() = _score
     val currentWordCount: LiveData<Int> get() = _currentWordCount
     val currentScrambledWord: LiveData<String> get() = _currentScrambledWord
+    private val resultList:  MutableList<String> = mutableListOf()
 
     init {
         Log.d(TAG, "Game View Model is created!")
@@ -35,8 +36,10 @@ class GameViewModel : ViewModel() {
             getNextWord()
         } else {
             _currentScrambledWord.value = String(tempWord)
+            var resultString = _currentScrambledWord.value + ": " + currentWord+"\n"
             wordsList.add(currentWord)
             _currentWordCount.value = _currentWordCount.value?.inc()
+            resultList.add(resultString)
         }
     }
 
@@ -76,5 +79,9 @@ class GameViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         Log.d("GameFragment", "GameViewModel destroyed!")
+    }
+
+    fun getResultMessage(str:String):String{
+        return str+"\n"+resultList.toString().replace("[","").replace("]","").replace(",","")
     }
 }

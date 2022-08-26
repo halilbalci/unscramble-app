@@ -21,6 +21,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.android.unscramble.R
@@ -47,7 +48,7 @@ class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout XML file and return a binding object instance
-        binding = GameFragmentBinding.inflate(inflater, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.game_fragment,container, false)
         Log.d(
             viewModel.TAG, "Word: ${viewModel.currentScrambledWord} " +
                     "Score: ${viewModel.score} WordCount: ${viewModel.currentWordCount}"
@@ -128,7 +129,7 @@ class GameFragment : Fragment() {
     private fun showFinalScroreDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.congratulations))
-            .setMessage(getString(R.string.you_scored, viewModel.score.value))
+            .setMessage(viewModel.getResultMessage(getString(R.string.you_scored,viewModel.score.value)))
             .setCancelable(false)
             .setNegativeButton(getString(R.string.exit)) { _, _ ->
                 exitGame()
