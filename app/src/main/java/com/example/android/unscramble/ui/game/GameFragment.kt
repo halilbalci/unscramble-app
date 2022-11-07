@@ -48,7 +48,7 @@ class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout XML file and return a binding object instance
-        binding = DataBindingUtil.inflate(inflater, R.layout.game_fragment,container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.game_fragment, container, false)
         Log.d(
             viewModel.TAG, "Word: ${viewModel.currentScrambledWord} " +
                     "Score: ${viewModel.score} WordCount: ${viewModel.currentWordCount}"
@@ -59,8 +59,8 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.gameViewModel=viewModel
-        binding.maxNoOfWords= MAX_NO_OF_WORDS
+        binding.gameViewModel = viewModel
+        binding.maxNoOfWords = MAX_NO_OF_WORDS
         binding.lifecycleOwner = viewLifecycleOwner
         // Update the UI
         binding.submit.setOnClickListener { onSubmitWord() }
@@ -119,7 +119,14 @@ class GameFragment : Fragment() {
     private fun showFinalScroreDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.congratulations))
-            .setMessage(viewModel.getResultMessage(getString(R.string.you_scored,viewModel.score.value)))
+            .setMessage(
+                viewModel.getResultMessage(
+                    getString(
+                        R.string.you_scored,
+                        viewModel.score.value
+                    )
+                )
+            )
             .setCancelable(false)
             .setNegativeButton(getString(R.string.exit)) { _, _ ->
                 exitGame()

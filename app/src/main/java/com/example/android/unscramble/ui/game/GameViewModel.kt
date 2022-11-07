@@ -1,8 +1,12 @@
 package com.example.android.unscramble.ui.game
 
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.TtsSpan
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 
 class GameViewModel : ViewModel() {
@@ -17,8 +21,22 @@ class GameViewModel : ViewModel() {
 
     val score: LiveData<Int> get() = _score
     val currentWordCount: LiveData<Int> get() = _currentWordCount
-    val currentScrambledWord: LiveData<String> get() = _currentScrambledWord
-    private val resultList:  MutableList<String> = mutableListOf()
+    val currentScrambledWord: LiveData<Spannable> = Transformations.map(_currentScrambledWord) {
+        if (it == null) {
+            SpannableString("")
+        } else {
+            val scrambledWord = it.toString()
+            val spannable: Spannable = SpannableString(scrambledWord)
+            spannable.setSpan(
+                TtsSpan.VerbatimBuilder(scrambledWord).build(),
+                0,
+                scrambledWord.length,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            spannable
+        }
+    }
+    private val resultList: MutableList<String> = mutableListOf()
 
     init {
         Log.d(TAG, "Game View Model is created!")
@@ -36,7 +54,7 @@ class GameViewModel : ViewModel() {
             getNextWord()
         } else {
             _currentScrambledWord.value = String(tempWord)
-            var resultString = _currentScrambledWord.value + ": " + currentWord+"\n"
+            var resultString = _currentScrambledWord.value + ": " + currentWord + "\n"
             wordsList.add(currentWord)
             _currentWordCount.value = _currentWordCount.value?.inc()
             resultList.add(resultString)
@@ -58,8 +76,8 @@ class GameViewModel : ViewModel() {
         _score.value = _score.value?.plus(SCORE_INCREASE)
     }
 
-    fun isUserWordCorrect(enteredValue:String): Boolean {
-        if(currentWord.equals(enteredValue,true)){
+    fun isUserWordCorrect(enteredValue: String): Boolean {
+        if (currentWord.equals(enteredValue, true)) {
             increaseScore()
             return true
         }
@@ -82,7 +100,7 @@ class GameViewModel : ViewModel() {
         Log.d("GameFragment", "GameViewModel destroyed!")
     }
 
-    fun getResultMessage(str:String):String{
-        return str+"\n"+resultList.toString().replace("[","").replace("]","").replace(",","")
+    fun getResultMessage(str: String): String {
+        return str + "\n" + resultList.toString().replace("[", "").replace("]", "").replace(",", "")
     }
 }
